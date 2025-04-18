@@ -1,20 +1,21 @@
 ﻿namespace DataStructure
 {
+    public class BinarySearchTreeNode<T>
+    {
+        public T Value;
+        public BinarySearchTreeNode<T>? Left;
+        public BinarySearchTreeNode<T>? Right;
+        public BinarySearchTreeNode(T value)
+        {
+            Value = value;
+            Left = null;
+            Right = null;
+        }
+    }
     public class BST<T> where T : IComparable<T>
     {
-        public class Node
-        {
-            public T Value;
-            public Node? Left;
-            public Node? Right;
-            public Node(T value)
-            {
-                Value = value;
-                Left = null;
-                Right = null;
-            }
-        }
-        Node? Root = null;
+
+        BinarySearchTreeNode<T>? Root = null;
 
         public BST()
         {
@@ -22,7 +23,7 @@
         }
         public BST(T value)
         {
-            Root = new Node(value);
+            Root = new BinarySearchTreeNode<T>(value);
         }
 
 
@@ -30,18 +31,18 @@
         {
             if (Root == null)
             {
-                Root = new Node(value);
+                Root = new BinarySearchTreeNode<T>(value);
             }
             else
             {
                 _Insert(ref Root, value);
             }
         }
-        private void _Insert(ref Node? node, T value)
+        private void _Insert(ref BinarySearchTreeNode<T>? node, T value)
         {
             if (node == null)
             {
-                node = new Node(value);
+                node = new BinarySearchTreeNode<T>(value);
                 return;
             }
 
@@ -53,7 +54,7 @@
         }
 
 
-        private void _PrintBST(Node? node)
+        private void _PrintBST(BinarySearchTreeNode<T>? node)
         {
             if (node == null)
                 return;
@@ -69,5 +70,23 @@
         {
             _PrintBST(Root);
         }
+
+        public BinarySearchTreeNode<T>? Find(T value)
+        {
+            return _Find(Root, value);
+        }
+        private BinarySearchTreeNode<T>? _Find(BinarySearchTreeNode<T>? node, T value)
+        {
+            if (node == null || value.Equals(node.Value)) return node;
+
+            else if(value.CompareTo(node.Value) < 0)
+                return _Find(node.Left, value);
+            
+            else
+                return _Find(node.Right, value);
+
+        }
+
+        
     }
 }
