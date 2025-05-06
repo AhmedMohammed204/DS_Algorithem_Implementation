@@ -12,7 +12,7 @@ namespace DataStructure
         public AVL(T value) : base(value) {
             
         }
-        
+        public AVL() { }
         private int _GetBalanceFactor(BinarySearchTreeNode<T> node)
         {
             if (node == null) return 0;

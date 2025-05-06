@@ -1,13 +1,12 @@
 ﻿using System;
 using DataStructure;
-using TestDS;
 namespace C23
 {
     class Program
     {
         static void Main(string[] args)
         {
-            AVL<int> root = new AVL<int>(30);
+            AVL<int> root = new AVL<int>();
             root.Insert(10);
             root.Insert(50);
             root.Insert(60);
