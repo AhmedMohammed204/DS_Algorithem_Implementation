@@ -13,13 +13,13 @@ namespace DataStructure
             
         }
         public AVL() { }
-        private int _GetBalanceFactor(BinarySearchTreeNode<T> node)
+        private int _GetBalanceFactor(BinarySearchTreeNode<T>? node)
         {
             if (node == null) return 0;
             return Depth(node?.Left) - Depth(node?.Right);
         }
         
-        private void _RR(ref BinarySearchTreeNode<T> current)
+        private void _RightRotation(ref BinarySearchTreeNode<T> current)
         {
             if (current == null || current.Left == null) return;
             var newRoot = current.Left;
@@ -28,7 +28,7 @@ namespace DataStructure
             current = newRoot;
 
         }
-        private void _LL(ref BinarySearchTreeNode<T>? current)
+        private void _LeftRotation(ref BinarySearchTreeNode<T>? current)
         {
             if (current == null || current.Right == null) return;
             var newRoot = current.Right;
@@ -37,50 +37,40 @@ namespace DataStructure
             current = newRoot;
 
         }
-        private void _RL(ref BinarySearchTreeNode<T> current)
-        {
-            if (current == null) return;
-            _LL(ref current.Left);
-            _RR(ref current);
-
-        }
-        private void _LR(ref BinarySearchTreeNode<T> current)
-        {
-            if (current == null) return;
-            _RR(ref current.Right);
-            _LL(ref current);
-
-        }
-        void _BalanceTree(ref BinarySearchTreeNode<T> node, int PrevBF)
+        void _BalanceTree(ref BinarySearchTreeNode<T>? node)
         {
             if (node == null) return;
 
+            _BalanceTree(ref node.Left);
+            _BalanceTree(ref node.Right);
 
-            int BF = _GetBalanceFactor(node);
-            _BalanceTree(ref node.Left, BF);
-            _BalanceTree(ref node.Right, BF);
-            if(PrevBF > 1 || PrevBF < -1)
+            int bf = _GetBalanceFactor(node);
+
+            if (bf > 1)
             {
-                if (PrevBF > 1) _LR(ref node);
-                else _RL(ref node);
+                if (_GetBalanceFactor(node.Left) < 0)
+                    _LeftRotation(ref node.Left);
+                _RightRotation(ref node);
             }
-            else
+            else if (bf < -1)
             {
-                if (BF > 1) _RR(ref node);
-                else if (BF < -1) _LL(ref node);
+                if (_GetBalanceFactor(node.Right) > 0)
+                    _RightRotation(ref node.Right);
+                _LeftRotation(ref node);
             }
 
         }
+
         public override void Insert(T value)
         {
             base.Insert(value);
-            _BalanceTree(ref Root, 0);
+            _BalanceTree(ref Root);
             BalanceFactor = _GetBalanceFactor(Root);
         }
         public override void Delete(T value)
         {
             base.Delete(value);
-            _BalanceTree(ref Root, 0);
+            _BalanceTree(ref Root);
             BalanceFactor = _GetBalanceFactor(Root);
         }
     }
